@@ -8,7 +8,10 @@ except ModuleNotFoundError:
     subprocess.check_call([sys.executable, "-m", "pip", "install", "pygame"])
     from pygame import mixer
 
-mixer.init()
+try:
+    mixer.init()
+except pygame.error as e:
+    print(f"Audio initialization failed: {e}")
 
 def PlaySound(path, volume):
     mixer.music.load(path)

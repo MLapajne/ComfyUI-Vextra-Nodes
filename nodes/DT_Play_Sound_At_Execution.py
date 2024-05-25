@@ -1,6 +1,10 @@
 import subprocess, sys, os
 
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
+
+# Set the SDL audio driver to dummy to avoid issues with missing audio hardware
+os.environ['SDL_AUDIODRIVER'] = 'dummy'
+
 try:
     from pygame import mixer
 except ModuleNotFoundError:
@@ -14,9 +18,12 @@ except pygame.error as e:
     print(f"Audio initialization failed: {e}")
 
 def PlaySound(path, volume):
-    mixer.music.load(path)
-    mixer.music.set_volume(volume)
-    mixer.music.play()
+    try:
+        mixer.music.load(path)
+        mixer.music.set_volume(volume)
+        mixer.music.play()
+    except Exception as e:
+        print(f"Error playing sound: {e}")
 
 class Play_Sound_RealTime():
     """
